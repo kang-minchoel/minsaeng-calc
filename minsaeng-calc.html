@@ -1,0 +1,152 @@
+<!-- ✅ 민생회복 소비쿠폰 계산기 코드 시작 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>민생회복 소비쿠폰 계산기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2025 민생회복 소비쿠폰 계산기</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f9fafb;
+      padding: 2rem;
+    }
+    .calculator {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+    }
+    label {
+      display: block;
+      margin-bottom: 1rem;
+    }
+    input,
+    select {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #result {
+      background: #f0fdf4;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #10b981;
+      display: none;
+      white-space: pre-line;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h2>2025 민생회복 소비쿠폰 계산기</h2>
+    <p>※ 정부 발표 기준을 바탕으로 한 모의 계산기입니다. 실제 지급액은 상이할 수 있습니다.</p>
+
+    <label>거주 지역
+      <input id="region" type="text" placeholder="예: 고성군, 노원구" />
+    </label>
+
+    <label>성인 수
+      <input id="adults" type="number" value="2" min="1" />
+    </label>
+
+    <label>미성년 자녀 수
+      <input id="children" type="number" value="0" min="0" />
+    </label>
+
+    <label>소득 수준
+      <select id="income">
+        <option value="하위 90%">하위 90%</option>
+        <option value="상위 10%">상위 10%</option>
+      </select>
+    </label>
+
+    <label>계층 구분
+      <select id="group">
+        <option value="일반">일반</option>
+        <option value="차상위">차상위·한부모</option>
+        <option value="기초수급자">기초수급자</option>
+      </select>
+    </label>
+
+    <button onclick="calculateCoupon()">💰 예상 지급액 계산하기</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const ruralRegions = [
+      "고성군", "거창군", "함양군", "하동군", "합천군", "남해군", "산청군", "의령군",
+      "청송군", "영양군", "영덕군", "봉화군", "울진군", "예천군",
+      "단양군", "괴산군", "보은군", "옥천군", "영동군",
+      "정선군", "평창군", "영월군", "화천군", "양구군", "인제군", "양양군",
+      "진안군", "무주군", "장수군", "임실군", "순창군", "고창군", "부안군",
+      "담양군", "곡성군", "구례군", "고흥군", "보성군", "화순군", "장흥군", "강진군", "해남군", "영암군", "완도군", "진도군", "신안군",
+      "청도군", "고령군", "성주군", "칠곡군", "군위군", "의성군",
+      "함평군", "영광군", "장성군", "태안군", "서천군", "청양군", "예산군",
+      "보령시", "서산시"
+    ];
+
+    function calculateCoupon() {
+      const region = document.getElementById("region").value.trim();
+      const adults = parseInt(document.getElementById("adults").value);
+      const children = parseInt(document.getElementById("children").value);
+      const totalPeople = adults + children;
+      const income = document.getElementById("income").value;
+      const group = document.getElementById("group").value;
+
+      if (!region || isNaN(adults) || isNaN(children)) {
+        alert("모든 입력 항목을 정확히 입력해 주세요.");
+        return;
+      }
+
+      let per1 = 0, per2 = 0;
+      if (group === "기초수급자") {
+        per1 = 400000; per2 = 100000;
+      } else if (group === "차상위") {
+        per1 = 300000; per2 = 100000;
+      } else {
+        per1 = 150000;
+        if (income === "하위 90%") per2 = 100000;
+      }
+
+      let ruralBonus = 0;
+      const cleanedRegion = region.replace(/\s/g, "");
+      if (ruralRegions.some(r => cleanedRegion.includes(r.replace(/\s/g, "")))) {
+        ruralBonus = 50000 * totalPeople;
+      }
+
+      const total1 = per1 * totalPeople;
+      const total2 = per2 * totalPeople;
+      const total = total1 + total2 + ruralBonus;
+
+      const resultBox = document.getElementById("result");
+      resultBox.innerText = `👤 총 인원: ${totalPeople}명\n1차 지급: ${total1.toLocaleString()}원\n2차 지급: ${total2.toLocaleString()}원\n${ruralBonus > 0 ? `농촌 추가: ${ruralBonus.toLocaleString()}원\n` : ""}총 예상 수령액: ${total.toLocaleString()}원`;
+      resultBox.style.display = "block";
+    }
+  </script>
+</body>
+</html>
+
